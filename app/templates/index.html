@@ -18,7 +18,7 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
         <img src="/static/images/logo.png" alt="logo" class="logo">
-        <a class="navbar-brand" href="#">MY SHOP</a>
+        <a class="navbar-brand" href="/">MY SHOP</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,7 +29,7 @@
                 </li>
                 {% for c in categories %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">{{c.name}}</a>
+                    <a class="nav-link" href="/categories?id={{c.id}}">{{c.name}}</a>
                 </li>
                 {% endfor %}
 
@@ -46,7 +46,7 @@
     <h3 class="mt-5">All products</h3>
     <div class="row mt-3 px-5">
         {% for p in products %}
-        <div class=" col-xs-12 col-md-3 p-2 ">
+        <div class=" col-xs-12 col-sm-6 col-md-3 p-2 ">
             <div class="card product-card">
                 <img class="card-img-top" src="{{ p.image }}" alt="Card image">
                 <div class="card-body">

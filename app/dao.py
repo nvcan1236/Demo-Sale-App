@@ -7,7 +7,7 @@ def get_categories():
          'name': 'Tablet'
          },
         {id: 3,
-         'name': 'Computer'
+         'name': 'Laptop'
          },
     ]
 

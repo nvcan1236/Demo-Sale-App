@@ -17,7 +17,8 @@ def category():
     cat_id = request.args.get('id')
     cates = dao.get_categories()
     products = dao.get_products_by_category(cat_id)
-    return  render_template('index.html', categories=cates, products=products)
+    return render_template('index.html', categories=cates, products=products)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)

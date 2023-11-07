@@ -16,6 +16,7 @@ class Product(db.Model):
     image = Column(String(255))
     category__id = Column(Integer, ForeignKey(Category.id), nullable=False)
 
+
 def create_init_category():
     cats = ['Điện thoại', 'Laptop', 'Tablet']
     for cat in cats:
@@ -78,6 +79,7 @@ def create_init_products():
         p.category__id = product['cat_id']
         db.session.add(p)
         db.session.commit()
+
 
 if __name__ == '__main__':
     with app.app_context():

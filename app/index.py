@@ -21,4 +21,5 @@ def category():
 
 
 if __name__ == '__main__':
+    from app.admin import admin
     app.run(debug=True, port=5005)

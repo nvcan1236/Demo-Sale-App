@@ -6,7 +6,8 @@ home_connect_string = "mysql+pymysql://root:%s@localhost/saledb?charset=utf8mb4"
 class_connect_string = "mysql+pymysql://root:%s@localhost/saledb?charset=utf8mb4" % quote("Admin@123")
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = home_connect_string
+app.secret_key = 'DUKFHAKDGHNAK,DFHLDSKIFHALSK,JGDN ,KDFAJBN'
+app.config["SQLALCHEMY_DATABASE_URI"] = class_connect_string
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 db = SQLAlchemy(app=app)

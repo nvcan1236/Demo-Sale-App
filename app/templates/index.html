@@ -1,22 +1,31 @@
-{% extends 'layout/base.html' %}
-{% block content %}
-<section class="container">
-    <h3 class="mt-5">All products</h3>
-    <div class="row mt-3 px-5">
-        {% for p in products %}
-        <div class=" col-xs-12 col-sm-6 col-md-3 p-2 ">
-            <div class="card product-card">
-                <img class="card-img-top" src="{{ p.image }}" alt="Card image">
-                <div class="card-body">
-                    <h4 class="card-title">{{p.name}}</h4>
-                    <p class="card-text">{{ p.price }} vnd</p>
-                    <a href="#" class="btn btn-success">Chi tiết</a>
-                    <a href="#" class="btn btn-primary">Mua ngay</a>
-                </div>
+{% extends 'layout/base.html' %} {% block content %}
+<section class="container min-vh-100">
+  <h3 class="mt-5">All products</h3>
+  <div class="row mt-3 px-5">
+    {% for p in products %}
+    <div class="col-xs-12 col-sm-6 col-md-3 p-2">
+      <div class="card product-card">
+        <div class="card-img-top">
+          <img src="{{ p.image }}" alt="Card image" />
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">{{p.name}}</h4>
+        </div>
+        <div>
+            <p class="text-danger product-price">{{ p.price }} đ</p>
+            <div class="d-flex justify-content-between">
+                <a href="#" class="btn btn-secondary border px-4">Chi tiết</a>
+                <a href="#" class="btn btn-primary px-4">Mua ngay</a>
             </div>
         </div>
-        {% endfor%}
+      </div>
     </div>
-
+    {% endfor%}
+    {% if not products %}
+        <p class="text-center p-5 ">(Không tồn tại sản phẩm trong danh sách)</p>
+    {% endif %}
+  </div>
 </section>
+
+
 {% endblock %}

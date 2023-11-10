@@ -1,6 +1,14 @@
+from datetime import datetime
 from app import db, app
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Boolean, Enum
 from sqlalchemy.orm import relationship
+from flask_login import UserMixin
+from enum import Enum as UserEnum
+
+
+class UserRole(UserEnum):
+    ADMIN = 1
+    USER = 2
 
 
 class Category(db.Model):
@@ -21,6 +29,20 @@ class Product(db.Model):
 
     def __str__(self):
         return self.name
+
+
+class User(db.Model, UserMixin):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    email = Column(String(30), nullable=False)
+    username = Column(String(30), default='user' + id)
+    # is_active = Column(Boolean, default=True)
+    password = Column(String(50), nullable=False)
+    avatar = Column(String(255))
+    create_at = Column(String(100), default=datetime.now())
+    user_role = Column(Enum(UserRole), default=UserRole.USER)
+
+    def __str__(self):
+        return self.username
 
 
 def create_init_category():
@@ -89,7 +111,7 @@ def create_init_products():
 
 if __name__ == '__main__':
     with app.app_context():
-        create_init_category()
-        create_init_products()
+        # create_init_category()
+        # create_init_products()
 
-        # db.create_all()
+        db.create_all()

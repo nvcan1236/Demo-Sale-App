@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'DUKFHAKDGHNAK,DFHLDSKIFHALSK,JGDN ,KDFAJBN'
 app.config["SQLALCHEMY_DATABASE_URI"] = home_connect_string
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config["PAGE_SIZE"] = 4
 login = LoginManager(app=app)
 
 db = SQLAlchemy(app=app)

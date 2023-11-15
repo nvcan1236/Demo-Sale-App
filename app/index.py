@@ -1,3 +1,5 @@
+import math
+
 from flask import render_template, request, redirect
 from app import app, login as saleapp_login
 from flask_login import login_user
@@ -8,16 +10,19 @@ import dao
 def index():
     kw = request.args.get('kw')
     cates = dao.get_categories()
-    products = dao.get_products(kw)
-    return render_template('index.html', categories=cates, products=products)
+    page = request.args.get('page')
+    cate_id = request.args.get('cate_id')
+    products = dao.get_products(kw, cate_id, page)
+    page_count = math.ceil(dao.count_product()/app.config['PAGE_SIZE'])
+    return render_template('index.html', categories=cates, products=products, page_count=page_count)
 
 
-@app.route('/categories')
-def category():
-    cat_id = request.args.get('id')
-    cates = dao.get_categories()
-    products = dao.get_products_by_category(cat_id)
-    return render_template('index.html', categories=cates, products=products)
+# @app.route('/categories')
+# def category():
+#     cat_id = request.args.get('id')
+#     cates = dao.get_categories()
+#     products = dao.get_products_by_category(cat_id)
+#     return render_template('index.html', categories=cates, products=products)
 
 
 @app.route('/admin/register', methods=['post'])

@@ -4,10 +4,10 @@
 {% if current_user.is_authenticated %} 
 <h2 class="text-info">CHAO MUNG {{current_user.username}} DEN VOI TRANG QUAN TRI</h2>
 {% else %}
-<section class="auth login mt-5">
-  <form action="{{ url_for('login')}}" class="login-form " method="post">
+<section class="auth login mt-5 d-flex justify-content-center">
+  <form action="{{ url_for('login')}}" class="login-form px-5 py-4 rounded" method="post" style="width: 600px; background-color: #eee;">
     <h2>Đăng nhập</h2>
-    <div class="form-group">
+    <div class="form-group mt-3">
       <label for="email">Username:</label>
       <input
         type="text"
@@ -38,9 +38,9 @@
     </div>
   </form>
 
-  <form action="{{ url_for('register') }}" class="register-form hide" method="post">
+  <form action="{{ url_for('register') }}" class="register-form hide px-5 py-4 rounded" method="post" style="width: 600px; background-color: #eee;">
     <h2>Đăng kí</h2>
-    <div class="form-group">
+    <div class="form-group mt-3">
       <label for="re-username">Username:</label>
       <input
         type="text"

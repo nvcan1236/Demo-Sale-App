@@ -1,9 +1,11 @@
+import json
 import math
 
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify, session
 from app import app, login as saleapp_login
 from flask_login import login_user
 import dao
+import utils
 
 
 @app.route('/')
@@ -52,6 +54,31 @@ def login():
 @saleapp_login.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id=user_id)
+
+
+@app.route('/api/cart', methods=['post'])
+def add_to_cart():
+    data = request.json
+    id = str(data.get('id'))
+    name = data.get('name')
+    price = data.get('price')
+
+    cart = session.get('cart')
+    if cart is None:
+        cart = {}
+
+    if id in cart:
+        cart[id]['quantity'] += 1
+    else:
+        cart[id] = {
+            'id': id,
+            'name': name,
+            'price': price,
+            'quantity': 1
+        }
+    print(cart)
+    session['cart'] = cart
+    return jsonify(utils.count_cart(cart))
 
 
 if __name__ == '__main__':

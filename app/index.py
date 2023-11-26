@@ -8,16 +8,26 @@ import dao
 import utils
 
 
+@app.context_processor
+def common_response():
+    return {
+        'categories': dao.get_categories(),
+        'cart': utils.count_cart(session.get('cart'))
+    }
+
 @app.route('/')
 def index():
     kw = request.args.get('kw')
-    cates = dao.get_categories()
     page = request.args.get('page')
     cate_id = request.args.get('cate_id')
     products = dao.get_products(kw, cate_id, page)
     page_count = math.ceil(dao.count_product()/app.config['PAGE_SIZE'])
-    return render_template('index.html', categories=cates, products=products, page_count=page_count)
+    return render_template('index.html', products=products, page_count=page_count)
 
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
 
 # @app.route('/categories')
 # def category():
@@ -56,28 +66,41 @@ def load_user(user_id):
     return dao.get_user_by_id(user_id=user_id)
 
 
-@app.route('/api/cart', methods=['post'])
+@app.route('/api/cart', methods=['post', 'patch', 'delete'])
 def add_to_cart():
-    data = request.json
-    id = str(data.get('id'))
-    name = data.get('name')
-    price = data.get('price')
 
+    data = request.json
     cart = session.get('cart')
     if cart is None:
         cart = {}
 
-    if id in cart:
-        cart[id]['quantity'] += 1
-    else:
-        cart[id] = {
-            'id': id,
-            'name': name,
-            'price': price,
-            'quantity': 1
-        }
-    print(cart)
+    if request.method == 'POST':
+        id = str(data.get('id'))
+        name = data.get('name')
+        price = data.get('price')
+
+        if id in cart:
+            cart[id]['quantity'] += 1
+        else:
+            cart[id] = {
+                'id': id,
+                'name': name,
+                'price': price,
+                'quantity': 1
+            }
+    elif request.method == 'PATCH':
+        id = str(data.get('id'))
+        quantity = data.get('quantity')
+        if id in cart:
+            cart[id]['quantity'] = quantity
+
+    elif request.method == 'DELETE':
+        id = str(data.get('id'))
+        if id in cart:
+            del cart[id]
+
     session['cart'] = cart
+    print(cart)
     return jsonify(utils.count_cart(cart))
 
 

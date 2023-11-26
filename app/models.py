@@ -111,7 +111,7 @@ def create_init_products():
 
 if __name__ == '__main__':
     with app.app_context():
-        create_init_category()
-        create_init_products()
-
+        # create_init_category()
+        # create_init_products()
+        #
         db.create_all()

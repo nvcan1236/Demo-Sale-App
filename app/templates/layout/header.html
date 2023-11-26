@@ -15,15 +15,19 @@
                     <a class="nav-link" href="/?cate_id={{c.id}}">{{c.name}}</a>
                 </li>
                 {% endfor %}d
-                <li class="nav-item">
-                    <a class="nav-link text-danger">&#128722; Giỏ hàng <span class="bg-danger badge cart-amount">0</span></a>
-                </li>
+
             </ul>
         </div>
-        <form class="d-flex " action="/" method="get">
+        <div class="d-flex gap-3">
+            <div >
+                    <a href="/cart" class="nav-link text-warning">&#128722; Giỏ hàng <span class="bg-danger badge cart-amount">{{cart['total_quantity']}}</span></a>
+            </div>
+            <form class="d-flex " action="/" method="get">
             <input class="form-control me-3" name="kw" type="text" placeholder="Search products ...">
             <button class="btn btn-primary" type="submit">Search</button>
         </form>
+        </div>
+
     </div>
 
 </nav>

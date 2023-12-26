@@ -11,8 +11,12 @@ class UserRole(UserEnum):
     USER = 2
 
 
-class Category(db.Model):
+class BaseModel(db.Model):
+    __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
+
+
+class Category(BaseModel):
     name = Column(String(50), nullable=False, unique=True)
     products = relationship('Product', backref='category', lazy=True)
 
@@ -20,29 +24,41 @@ class Category(db.Model):
         return self.name
 
 
-class Product(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
+class Product(BaseModel):
     name = Column(String(100), nullable=False, unique=True)
     price = Column(Float, default=0)
     image = Column(String(255))
-    category__id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    receipt_details = relationship('ReceiptDetail', backref='product', lazy=True)
 
     def __str__(self):
         return self.name
 
 
-class User(db.Model, UserMixin):
-    id = Column(Integer, primary_key=True, autoincrement=True)
+class User(BaseModel, UserMixin):
     email = Column(String(30), nullable=False)
-    username = Column(String(30), default='user' + id)
-    # is_active = Column(Boolean, default=True)
+    username = Column(String(30), default=('user' + str(id)))
     password = Column(String(50), nullable=False)
     avatar = Column(String(255))
     create_at = Column(String(100), default=datetime.now())
     user_role = Column(Enum(UserRole), default=UserRole.USER)
+    receipts = relationship('Receipt', backref='user', lazy=True)
 
     def __str__(self):
         return self.username
+
+
+class Receipt(BaseModel):
+    created_at = Column(String(100), default=datetime.now())
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    details = relationship('ReceiptDetail', backref='receipt', lazy=True)
+
+
+class ReceiptDetail(db.Model):
+    receipt_id = Column(Integer, ForeignKey(Receipt.id), primary_key=True)
+    product_id = Column(Integer, ForeignKey(Product.id), primary_key=True)
+    qty = Column(Integer)
+    unit_price = Column(Float, default=0)
 
 
 def create_init_category():

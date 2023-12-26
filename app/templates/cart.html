@@ -2,7 +2,7 @@
 <section class="container min-vh-100 p-5">
   <h3 class="">Giỏ hàng</h3>
   {% if session.get('cart') %}
-  <table class="table mt-3">
+    <table class="table mt-3">
    <thead>
       <tr>
         <th>MÃ SP</th>
@@ -32,13 +32,18 @@
       <div class=" px-5">Tổng số lượng: <strong>{{ cart['total_quantity'] }} sản phẩm</strong></div>
       <div class="px-5">Tổng cộng: <strong>{{ cart['total_price'] }}đ</strong></div>
     </div>
-    <div class="text-end"                                                                                                                                   >
-      <button class="btn btn-primary mt-5">Thanh toán</button>
+    <div class="text-end">
+        {% if current_user.is_authenticated %}
+            <button class="btn btn-primary mt-5" onclick="pay()">Thanh toán</button>
+        {% else %}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Đăng kí/ Đăng nhập</button>
+        {% endif  %}
     </div>
-  
-    {% else %}
-      <h5 class="mt-5 text-center">(Không tìm thấy giỏ hàng)</h5>
-    {% endif %}
+
+        {% else %}
+          <h5 class="mt-5 text-center">(Không tìm thấy giỏ hàng)</h5>
+        {% endif %}
 </section>
-<script src="{{url_for('static', filename='js/cart.js')}}"></script>
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
 {% endblock %}
+

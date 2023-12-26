@@ -23,11 +23,44 @@
                     <a href="/cart" class="nav-link text-warning">&#128722; Giỏ hàng <span class="bg-danger badge cart-amount">{{cart['total_quantity']}}</span></a>
             </div>
             <form class="d-flex " action="/" method="get">
-            <input class="form-control me-3" name="kw" type="text" placeholder="Search products ...">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
+                <input class="form-control me-3" name="kw" type="text" placeholder="Search products ...">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+
+            <div class="d-flex user align-items-center gap-3">
+            {% if current_user.is_authenticated %}
+                <a href="/logout">Đăng xuất</a>
+                <span>{{ current_user.username}}</span>
+                <div class="avatar">
+                    <img src="https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg" alt="avatar">
+                </div>
+            {% else %}
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Đăng kí/ Đăng nhập</button>
+            {% endif  %}
+            </div>
+
         </div>
+
 
     </div>
 
 </nav>
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal body -->
+        <div class="modal-body">
+
+          {% include '/layout/login_form.html'%}
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>

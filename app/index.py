@@ -3,17 +3,21 @@ import math
 
 from flask import render_template, request, redirect, jsonify, session
 from app import app, login as saleapp_login
-from flask_login import login_user
+from flask_login import login_user, logout_user, login_required
 import dao
 import utils
+from flask_login import current_user
 
 
 @app.context_processor
 def common_response():
     return {
         'categories': dao.get_categories(),
-        'cart': utils.count_cart(session.get('cart'))
+        'cart': utils.count_cart(session.get('cart')),
+        'current_user': current_user
     }
+
+
 
 @app.route('/')
 def index():
@@ -45,7 +49,7 @@ def register():
     confirm_password = request.form.get('confirm_pw')
     if password == confirm_password:
         dao.create_user(username, email, password)
-        return redirect('/admin')
+        return redirect(utils.get_prev_url())
     # else:
     #     render_template('/admin/index.html', pw_error='Mật khẩu không trùng khớp')
 
@@ -57,8 +61,13 @@ def login():
     user = dao.check_user(username=username, password=password)
     if user:
         login_user(user)
+        return redirect(utils.get_prev_url())
 
-    return redirect('/admin')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(utils.get_prev_url())
 
 
 @saleapp_login.user_loader
@@ -102,6 +111,25 @@ def add_to_cart():
     session['cart'] = cart
     print(cart)
     return jsonify(utils.count_cart(cart))
+
+
+@app.route('/api/pay', methods=['post'])
+@login_required
+def pay():
+    cart = session.get('cart')
+    if dao.add_receipt(cart):
+        del session['cart']
+        return jsonify({
+            'statusCode': 200,
+            'message': 'Them hoa don thanh cong'
+        })
+    else:
+        return jsonify({
+            'statusCode': 400,
+            'message': 'Them hoa don KHONG thanh cong'
+        })
+
+
 
 
 if __name__ == '__main__':

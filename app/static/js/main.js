@@ -21,7 +21,6 @@ function addToCart(id, name, price) {
 
 function updateCart(e, id) {
     quantity = e.target.value
-    console.log('sedsdfsv')
     fetch('/api/cart', {
         method: 'patch',
         body: JSON.stringify({
@@ -53,7 +52,30 @@ function deleteFromCart(id) {
     }).then(function (res) {
         return res.json()
     }).then(function (data) {
-        amount = document.querySelector('.cart-amount')
-        amount.innerText = data['total_quantity']
+        location.reload()
     })
 }
+
+function pay() {
+    if(confirm('Bạn có chắc muốn thanh toán?') === true) {
+        fetch('/api/pay', {
+            method: 'post'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.statusCode == 200) {
+                location.reload()
+            }
+            else if (data.statusCode == 400) {
+                alert(data.message)
+            }
+        })
+    }
+}
+
+const login = document.querySelector('.login-form')
+const register= document.querySelector('.register-form')
+  function switchForm() {
+    login.classList.toggle('hide')
+    register.classList.toggle('hide')
+  }

@@ -1,6 +1,7 @@
 import hashlib
-from app.models import Category, Product, User
+from app.models import Category, Product, User, Receipt, ReceiptDetail
 from app import db, app
+from flask_login import current_user
 
 
 def get_categories():
@@ -30,7 +31,7 @@ def get_products(kw, cate_id, page=None):
         page = int(page)
         page_size = app.config['PAGE_SIZE']
         start = (page - 1) * page_size
-        products = products.slice(start, start+page_size)
+        products = products.slice(start, start + page_size)
         return products
 
     return products.all()
@@ -57,3 +58,22 @@ def check_user(username, password):
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+
+def add_receipt(cart):
+    if cart:
+        r = Receipt(user=current_user)
+        db.session.add(r)
+        for i in cart.values():
+            d = ReceiptDetail(receipt=r, product_id=i['id'], unit_price=i['price'], qty=i['quantity'])
+            db.session.add(d)
+
+        try:
+            db.session.commit()
+        except:
+            return False
+        else:
+            return True
+
+    return False
+

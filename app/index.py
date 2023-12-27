@@ -18,7 +18,6 @@ def common_response():
     }
 
 
-
 @app.route('/')
 def index():
     kw = request.args.get('kw')
@@ -61,7 +60,10 @@ def login():
     user = dao.check_user(username=username, password=password)
     if user:
         login_user(user)
+
         return redirect(utils.get_prev_url())
+    else:
+        return redirect('/')
 
 
 @app.route('/logout')
@@ -128,8 +130,6 @@ def pay():
             'statusCode': 400,
             'message': 'Them hoa don KHONG thanh cong'
         })
-
-
 
 
 if __name__ == '__main__':

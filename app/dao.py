@@ -2,6 +2,7 @@ import hashlib
 from app.models import Category, Product, User, Receipt, ReceiptDetail
 from app import db, app
 from flask_login import current_user
+from flask import request
 
 
 def get_categories():
@@ -9,7 +10,7 @@ def get_categories():
 
 
 def get_products_by_category(id):
-    products = Product.query.filter(Product.category__id == id)
+    products = Product.query.filter(Product.category_id == id)
 
     return products
 
@@ -25,7 +26,7 @@ def get_products(kw, cate_id, page=None):
         products = products.filter(Product.name.contains(kw))
 
     if cate_id:
-        products = products.filter(Product.category__id == cate_id)
+        products = products.filter(Product.category_id == cate_id)
 
     if page:
         page = int(page)
@@ -37,11 +38,14 @@ def get_products(kw, cate_id, page=None):
     return products.all()
 
 
-def create_user(username, email, password):
+def create_user(username, email, password, avatar):
     u = User()
     u.username = username
     u.email = email
     u.password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    avatar = request.files.get('avatar')
+    if avatar:
+        cloudinary.uploader.upload(avatar)
     db.session.add(u)
     db.session.commit()
 

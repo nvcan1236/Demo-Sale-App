@@ -120,7 +120,7 @@ def create_init_products():
         p.name = product['name']
         p.price = product['price']
         p.image = product['image']
-        p.category__id = product['cat_id']
+        p.category_id = product['cat_id']
         db.session.add(p)
         db.session.commit()
 
@@ -128,6 +128,6 @@ def create_init_products():
 if __name__ == '__main__':
     with app.app_context():
         # create_init_category()
-        # create_init_products()
-        #
-        db.create_all()
+        create_init_products()
+
+        # db.create_all()
